@@ -162,7 +162,8 @@ prepare_node_env()
 # ==================== 前端工程构建 ====================
 
 set(DEVICE_PAGE_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/device_page")
-set(DEVICE_PAGE_DIST_DIR "${DEVICE_PAGE_SRC_DIR}/dist")
+# Build into the build tree: a build in device_page/dist changes the files that git tracks there.
+set(DEVICE_PAGE_DIST_DIR "${CMAKE_CURRENT_BINARY_DIR}/device_page_dist")
 set(DEVICE_PAGE_TARGET_DIR "${CMAKE_SOURCE_DIR}/resources/web/device_page/dist")
 
 get_filename_component(NODE_BIN_PATH "${NODE_EXECUTABLE}" DIRECTORY)
@@ -181,7 +182,7 @@ file(MAKE_DIRECTORY "${PNPM_STORE_DIR}")
 
 add_custom_target(device_page_build ALL
     COMMAND ${CMAKE_COMMAND} -E env "PATH=${DEVICE_PAGE_PATH}" "PNPM_STORE_DIR=${PNPM_STORE_DIR}" ${PNPM_EXECUTABLE} install
-    COMMAND ${CMAKE_COMMAND} -E env "PATH=${DEVICE_PAGE_PATH}" "PNPM_STORE_DIR=${PNPM_STORE_DIR}" ${PNPM_EXECUTABLE} run build
+    COMMAND ${CMAKE_COMMAND} -E env "PATH=${DEVICE_PAGE_PATH}" "PNPM_STORE_DIR=${PNPM_STORE_DIR}" ${PNPM_EXECUTABLE} run build --outDir "${DEVICE_PAGE_DIST_DIR}" --emptyOutDir
     COMMAND  ${CMAKE_COMMAND} -E make_directory "${DEVICE_PAGE_TARGET_DIR}"
     COMMAND  ${CMAKE_COMMAND} -E copy_directory "${DEVICE_PAGE_DIST_DIR}" "${DEVICE_PAGE_TARGET_DIR}"
     WORKING_DIRECTORY ${DEVICE_PAGE_SRC_DIR}

@@ -35,3 +35,6 @@ test.js
 /src/slic3r/QIDI/
 /deps/pgLibConnect
 .workbuddy
+# Made by the device_page_build step (src/slic3r/GUI/DeviceWeb/CMakeLists.txt).
+/src/slic3r/GUI/DeviceWeb/device_page/node_modules/
+/resources/web/device_page/
