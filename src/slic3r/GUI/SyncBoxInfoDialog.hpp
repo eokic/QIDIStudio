@@ -13,6 +13,8 @@
 
 #if QDT_RELEASE_TO_PUBLIC
 #include "../QIDI/QIDINetworkTypes.hpp"
+#else
+#include "../QIDIPublic/QIDINetworkTypes.hpp"
 #endif
 
 class Button;

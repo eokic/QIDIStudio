@@ -11,7 +11,11 @@
 #include "../QIDI/QIDINetwork.hpp"
 #endif
 
+#if QDT_RELEASE_TO_PUBLIC
 #include "../QIDI/QIDIDeviceApi.hpp"
+#else
+#include "../QIDIPublic/QIDIDeviceApi.hpp"
+#endif
 #include <wx/listimpl.cpp>
 
 #include "DeviceCore/DevManager.h"

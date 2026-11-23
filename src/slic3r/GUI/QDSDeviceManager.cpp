@@ -27,6 +27,7 @@
 #include <sstream>
 #include <unordered_set>
 #include <utility>
+#include <wx/mstream.h>
 #include <future>
 #include <functional>
 #include <algorithm>
@@ -44,8 +45,12 @@
 #include "../QIDI/P2PManager.hpp"
 #endif
 
+#if QDT_RELEASE_TO_PUBLIC
 #include "../QIDI/QIDIDeviceApi.hpp"
 #include "../QIDI/QIDIFileManager.hpp"
+#else
+#include "../QIDIPublic/QIDIDeviceApi.hpp"
+#endif
 
 //cj_2
 #include <wx/image.h>

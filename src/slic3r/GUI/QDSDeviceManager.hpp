@@ -24,7 +24,11 @@
 #include "nlohmann/json.hpp"
 #include "libslic3r/GCode/ThumbnailData.hpp"
 
+#if QDT_RELEASE_TO_PUBLIC
 #include "../QIDI/QIDIDeviceWebSocket.hpp"
+#else
+#include "../QIDIPublic/QIDIDeviceWebSocket.hpp"
+#endif
 
 using namespace nlohmann;
 

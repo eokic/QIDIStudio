@@ -17,6 +17,7 @@
 #include <wx/progdlg.h>
 #include <wx/clipbrd.h>
 #include <wx/dcgraph.h>
+#include <wx/tooltip.h>
 #include <miniz.h>
 #include <algorithm>
 #include "BitmapCache.hpp"
@@ -30,6 +31,8 @@
 
 #if QDT_RELEASE_TO_PUBLIC
 #include "../QIDI/P2PManager.hpp"
+#else
+#include "../QIDIPublic/QIDICloudStubs.hpp"
 #endif
 #include <wx/weakref.h>
 

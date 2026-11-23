@@ -32,7 +32,11 @@
 #include "../QIDI/QIDINetwork.hpp"
 #endif
 
+#if QDT_RELEASE_TO_PUBLIC
 #include "../QIDI/QIDIDeviceApi.hpp"
+#else
+#include "../QIDIPublic/QIDIDeviceApi.hpp"
+#endif
 using namespace Slic3r;
 using namespace Slic3r::GUI;
 

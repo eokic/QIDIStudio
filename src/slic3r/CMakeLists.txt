@@ -241,8 +241,6 @@ set(SLIC3R_GUI_SOURCES
     GUI/DownloadManager.hpp
     GUI/QDSDeviceManager.cpp
     GUI/QDSDeviceManager.hpp
-    QIDI/UserPresetSyncManager.cpp
-    QIDI/UserPresetSyncManager.hpp
     GUI/BedShapeDialog.cpp
     GUI/BedShapeDialog.hpp
     GUI/Plater.cpp
@@ -696,6 +694,18 @@ if(QDT_RELEASE_TO_PUBLIC)
             QIDI/QIDIDeviceApi.hpp
             QIDI/QIDIDeviceWebSocket.cpp
             QIDI/QIDIDeviceWebSocket.hpp
+            QIDI/UserPresetSyncManager.cpp
+            QIDI/UserPresetSyncManager.hpp
+		)
+else ()
+	# QIDI does not publish src/slic3r/QIDI/. These stand in for the parts the rest of the app uses.
+	list(APPEND SLIC3R_GUI_SOURCES
+            QIDIPublic/QIDICloudStubs.hpp
+            QIDIPublic/QIDIDeviceApi.cpp
+            QIDIPublic/QIDIDeviceApi.hpp
+            QIDIPublic/QIDIDeviceWebSocket.cpp
+            QIDIPublic/QIDIDeviceWebSocket.hpp
+            QIDIPublic/QIDINetworkTypes.hpp
 		)
 endif ()
 
@@ -770,7 +780,10 @@ encoding_check(libslic3r_gui)
 
 target_link_libraries(libslic3r_gui libslic3r cereal imgui imguizmo minilzo GLEW::GLEW OpenGL::GL hidapi ${wxWidgets_LIBRARIES} glfw libcurl OpenSSL::SSL OpenSSL::Crypto paho_mqtt)
 # pgLibConnect 按平台链接（Windows: 导入库；macOS/Linux: 静态库）
-if (WIN32)
+# The public repository does not ship deps/pgLibConnect (used only by the QIDI cloud module).
+if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../../deps/pgLibConnect/Lib)
+    message(STATUS "deps/pgLibConnect is missing: libslic3r_gui links without it")
+elseif (WIN32)
     target_link_libraries(libslic3r_gui ${CMAKE_CURRENT_SOURCE_DIR}/../../deps/pgLibConnect/Lib/Windows/pgDllConnect.lib)
 elseif (APPLE)
     target_link_libraries(libslic3r_gui ${CMAKE_CURRENT_SOURCE_DIR}/../../deps/pgLibConnect/Lib/MacOSX/libconnect.a)
