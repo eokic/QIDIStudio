@@ -635,6 +635,9 @@ set(SLIC3R_GUI_SOURCES
     Utils/OctoPrint.cpp
     Utils/PrintHost.hpp
     Utils/PrintHost.cpp
+    Utils/LanPrinter.hpp
+    Utils/LanPrinter.cpp
+    Utils/LanPrinterHttp.cpp
     Utils/NetworkAgent.cpp
     Utils/NetworkAgent.hpp
     Utils/MKS.hpp
