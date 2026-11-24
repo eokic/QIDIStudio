@@ -22904,6 +22904,15 @@ ThumbnailData Plater::get_thumbnailldate_send()
     return thumbnail_data;
 }
 
+ThumbnailData Plater::mcp_render_plate(int plate_idx, unsigned int width, unsigned int height, int view)
+{
+    ThumbnailData    thumbnail_data;
+    ThumbnailsParams thumbnail_params = {{}, false, true, true, false, plate_idx};
+    p->generate_thumbnail(thumbnail_data, width, height, thumbnail_params, Camera::EType::Ortho,
+                          static_cast<Camera::ViewAngleType>(view));
+    return thumbnail_data;
+}
+
 void Plater::publish_project()
 {
     return;

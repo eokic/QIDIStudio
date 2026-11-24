@@ -19,6 +19,8 @@
 #include <map>
 #include "Gizmos/GLGizmoBase.hpp"
 #include "OpenGLManager.hpp"
+#include "Mcp/McpServer.hpp"
+#include <wx/clipbrd.h>
 #ifdef __WINDOWS__
 #ifdef _MSW_DARK_MODE
 #include "dark_mode.hpp"
@@ -933,6 +935,12 @@ wxBoxSizer *PreferencesDialog::create_item_checkbox(wxString title, wxWindow *pa
         }*/
         app_config->set_bool(param, checkbox->GetValue());
         app_config->save();
+        if (param == "mcp_server_enabled") {
+            Mcp::Server::instance().apply_config();
+            if (checkbox->GetValue() && !Mcp::Server::instance().running())
+                MessageDialog(this, wxString::Format(_L("The MCP server could not start: port %d is in use."), Mcp::Server::instance().port()),
+                              _L("MCP server"), wxOK | wxICON_WARNING).ShowModal();
+        }
 //ZY1
         if (param == "staff_pick_switch") {
             bool pbool = app_config->get("staff_pick_switch") == "true";
@@ -1589,6 +1597,19 @@ wxWindow* PreferencesDialog::create_general_page()
                                                         "webview_auto_fill");
 #endif
 
+    auto title_mcp = create_item_title(_L("AI Assistant (MCP)"), page, _L("AI Assistant (MCP)"));
+    auto item_mcp_enabled = create_item_checkbox(_L("Let AI assistants on this computer control QIDI Studio (MCP server)"), page,
+        _L("Starts an MCP server on 127.0.0.1 so an assistant such as Claude can load models, change settings, slice and send prints. "
+           "It only accepts connections from this computer that carry the access token."), 50, "mcp_server_enabled");
+    auto item_mcp_copy = create_item_button(_L("Connect Claude Code"), _L("Copy command"), page,
+        _L("Copies a 'claude mcp add' command with the address and access token. Paste it in a terminal."), []() {
+            Mcp::Server &srv = Mcp::Server::instance();
+            if (!srv.running()) srv.apply_config();
+            if (wxTheClipboard->Open()) {
+                wxTheClipboard->SetData(new wxTextDataObject(wxString::FromUTF8(srv.claude_code_command())));
+                wxTheClipboard->Close();
+            }
+        });
     auto title_develop_mode = create_item_title(_L("Develop Mode"), page, _L("Develop Mode"));
     auto item_develop_mode  = create_item_checkbox(_L("Develop mode"), page, _L("Develop mode"), 50, "developer_mode");
     // y6
@@ -1696,6 +1717,9 @@ wxWindow* PreferencesDialog::create_general_page()
 #ifdef _WIN32
     sizer_page->Add(item_webview_auto_fill, 0, wxTOP, FromDIP(3));
 #endif
+    sizer_page->Add(title_mcp, 0, wxTOP | wxEXPAND, FromDIP(20));
+    sizer_page->Add(item_mcp_enabled, 0, wxTOP, FromDIP(3));
+    sizer_page->Add(item_mcp_copy, 0, wxTOP, FromDIP(3));
     sizer_page->Add(title_develop_mode, 0, wxTOP | wxEXPAND, FromDIP(20));
     sizer_page->Add(item_develop_mode, 0, wxTOP, FromDIP(3));
     // y6

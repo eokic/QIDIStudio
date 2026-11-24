@@ -560,6 +560,8 @@ public:
     ThumbnailData get_thumbnailldate();
     //B64
     ThumbnailData get_thumbnailldate_send();
+    // MCP server: a picture of one plate as the 3D editor shows it. view: a Camera::ViewAngleType value.
+    ThumbnailData mcp_render_plate(int plate_idx, unsigned int width, unsigned int height, int view);
 
     void send_to_printer(bool isall = false);
     void export_gcode(bool prefer_removable);

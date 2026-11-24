@@ -102,6 +102,7 @@
 #include "KBShortcutsDialog.hpp"
 #include "DownloadProgressDialog.hpp"
 #include "HttpServer.hpp"
+#include "Mcp/McpServer.hpp"
 
 #include "BitmapCache.hpp"
 #include "Notebook.hpp"
@@ -1435,6 +1436,8 @@ void GUI_App::post_init()
            }
         }
     }
+    // MCP server for AI assistants (off unless enabled in Preferences).
+    Mcp::Server::instance().apply_config();
     BOOST_LOG_TRIVIAL(info) << "finished post_init";
 #ifdef _WIN32
     // Sets window property to mainframe so other instances can indentify it.
@@ -2818,6 +2821,7 @@ bool GUI_App::OnInit()
 
 int GUI_App::OnExit()
 {
+    Mcp::Server::instance().stop();
 #ifdef __APPLE__
     UnRegisterMacPowerCallBack();
 #endif
